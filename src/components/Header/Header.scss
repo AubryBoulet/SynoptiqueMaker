@@ -1,0 +1,28 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  align-items: center;
+  .button_slide {
+    cursor: pointer;
+    background: linear-gradient(to right, rgb(240, 167, 9) 50%, rgb(240, 198, 9) 50%);
+    color: white;
+    padding: .5rem ;
+    border: solid 2px black;
+    border-radius: .5rem;
+    box-shadow: 3px 3px 6px gray;
+    background-size: 200%;
+    background-position: 0%;
+    transition: background-position 0.3s ease-in;
+    &:active{
+      box-shadow: 0 0 1px;
+    }
+    &:hover{
+      background-position: -100%;
+    }
+  }
+  h1 {
+    cursor: pointer;
+    color: rgb(233, 176, 53);
+  }
+}

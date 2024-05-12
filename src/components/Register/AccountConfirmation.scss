@@ -1,0 +1,31 @@
+.register .register_form .valided {
+  color: green;
+  margin-bottom: .5rem;
+  border-radius: .5rem;
+  background: linear-gradient(to right, rgb(240, 167, 9) 50%, rgb(240, 198, 9) 50%);
+  background-size: 200%;
+  animation: 3s linear slide_text;
+}
+
+.register .register_form .newMail {
+  color: green;
+  margin-bottom: .5rem;
+  border-radius: .5rem;
+  background: linear-gradient(to right, rgb(240, 167, 9) 50%, rgb(240, 198, 9) 50%);
+  background-size: 200%;
+  animation: 10s linear slide_text;
+}
+.register .register_form .validate_form {
+  display: inline-flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+@keyframes slide_text {
+  from {
+    background-position: 0%;
+  }
+  to {
+    background-position: 100%;
+  }
+}
