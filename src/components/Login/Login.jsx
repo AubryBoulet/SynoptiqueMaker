@@ -10,7 +10,7 @@ export default function Login({
   mail,
   setMail,
   setToken,
-  setLoged,
+  setLogged,
   setUserId,
 }) {
   const [password, setPassword] = useState('');
@@ -71,7 +71,9 @@ export default function Login({
         }
         setToken(message.token);
         setUserId(message.id);
-        setLoged(true);
+        setLogged(true);
+        setMail('');
+        document.cookie = `SNMToken = ${message.token}`;
         navigate('/');
       })
       .catch((message) => {

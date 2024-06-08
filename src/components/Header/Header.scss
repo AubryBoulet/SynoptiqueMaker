@@ -1,8 +1,11 @@
 header {
   display: flex;
   justify-content: space-between;
-  padding: 0 1rem;
+  padding: 0 1rem 1rem;
   align-items: center;
+  box-shadow: 0px 1px 5px black;
+  position: sticky;
+  top: 0px;
   .button_slide {
     cursor: pointer;
     background: linear-gradient(to right, rgb(240, 167, 9) 50%, rgb(240, 198, 9) 50%);

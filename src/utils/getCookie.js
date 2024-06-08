@@ -1,4 +1,4 @@
-export default function getCookieValue(name: string): string | boolean {
+export default function getCookieValue(name) {
   const regex = new RegExp(`(^| )${name}=([^;]+)`);
   const match = document.cookie.match(regex);
   if (match) {

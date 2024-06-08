@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../../assets/logo.svg';
 
 import './App.scss';
@@ -9,20 +10,43 @@ import Login from '../Login/Login';
 import Register from '../Register/Register';
 import AccountConfirmation from '../Register/AccountConfirmation';
 import Home from '../Home/Home';
+import getCookieValue from '../../utils/getCookie';
+import logFromCookie from '../../utils/logFromCookie';
+import Synoptique from '../Synoptique/Synoptique';
+import loadSynoptiques from '../Synoptique/LoadSynoptiques';
 
 function App() {
   const [mail, setMail] = useState('');
   const [token, setToken] = useState('');
-  const [loged, setLoged] = useState(false);
+  const [logged, setLogged] = useState(false);
   const [userId, setUserId] = useState(0);
+  const [offsetHeight, setOffsetHeight] = useState(0);
+  const [synoptiqueList, setSynoptiqueList] = useState();
+
+  useEffect(() => {
+    if (getCookieValue('SNMToken')) {
+      logFromCookie({ setLogged, setUserId, setToken });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (logged) loadSynoptiques({ token, userId, setSynoptiqueList });
+  }, [logged]);
 
   return (
     <Router>
       <div className="App">
-        <Header loged={loged} setLoged={setLoged} />
+        <Header
+          logged={logged}
+          setLogged={setLogged}
+          setOffsetHeight={setOffsetHeight}
+        />
         <div className="body_content">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={<Home logged={logged} synoptiqueList={synoptiqueList} />}
+            />
             <Route
               path="/login"
               element={
@@ -30,7 +54,7 @@ function App() {
                   mail={mail}
                   setMail={setMail}
                   setToken={setToken}
-                  setLoged={setLoged}
+                  setLogged={setLogged}
                   setUserId={setUserId}
                 />
               }
@@ -42,6 +66,18 @@ function App() {
             <Route
               path="/accountconfirmation"
               element={<AccountConfirmation mail={mail} />}
+            />
+            <Route
+              path="/synoptique/:name"
+              element={
+                <Synoptique
+                  logged={logged}
+                  offsetHeight={offsetHeight}
+                  token={token}
+                  userId={userId}
+                  synoptiqueList={synoptiqueList}
+                />
+              }
             />
           </Routes>
         </div>

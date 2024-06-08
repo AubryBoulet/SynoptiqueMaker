@@ -1,9 +1,17 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/button-has-type */
 import './Home.scss';
+import HomeLogged from './HomeLogged';
+import HomeNotLogged from './HomeNotLogged';
 
-export default function Home() {
+export default function Home({ logged, synoptiqueList }) {
   return (
-    <body>
-      <div>This is my home</div>
-    </body>
+    <main>
+      {logged ? (
+        <HomeLogged synoptiqueList={synoptiqueList} />
+      ) : (
+        <HomeNotLogged />
+      )}
+    </main>
   );
 }
