@@ -42,7 +42,11 @@ export default class Point {
       calculedWidth = width;
       calculedHeight = (width / this.parent.width) * this.parent.height;
     }
-    this.position.x = (this.parent.width / calculedWidth) * mouseX;
-    this.position.y = (this.parent.height / calculedHeight) * mouseY;
+    // console.log('width :', width);
+    // console.log('height :', height);
+    // console.log('calculed width :', calculedWidth);
+    // console.log('calculed height :', calculedHeight);
+    this.position.x = (this.parent.width / calculedWidth) * (mouseX - 12);
+    this.position.y = (this.parent.height / calculedHeight) * (mouseY - 20);
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable one-var */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -17,6 +18,7 @@ export default function Synoptique({
   token,
   userId,
   synoptiqueList,
+  editMode,
 }) {
   const navigate = useNavigate();
   const backRef = useRef();
@@ -56,19 +58,45 @@ export default function Synoptique({
 
   const handleClickPoint = (e) => {
     const { index } = e.currentTarget.dataset;
-    console.log(`you clicked the ${points[index].content.title}`);
-  };
-
-  const handleDragPoint = (e) => {
-    if (e.pageY - offsetHeight > 0) {
-      const { index } = e.currentTarget.dataset;
-      points[index].movePoint(e.pageX, e.pageY - offsetHeight);
-      points[index].update();
+    if (editMode) {
+      console.log(
+        `you clicked the ${points[index].content.title} in edit mode`
+      );
+    } else {
+      console.log(
+        `you clicked the ${points[index].content.title} in visualisation mode`
+      );
     }
   };
 
-  const handleDragStopPoint = (e) => {
-    console.log('STOP Là faut envoyer la requête API pour modifier en BDD');
+  const handleDragStopPoint = async (e) => {
+    if (!editMode) return;
+    const { index } = e.currentTarget.dataset;
+    const { pageX } = e;
+    let { pageY } = e;
+    if (e.pageY - offsetHeight < 0) {
+      pageY = 0;
+    }
+    points[index].movePoint(pageX, pageY - offsetHeight);
+    points[index].update();
+    const credential = {
+      Id: points[index].content.id,
+      x: points[index].position.x,
+      y: points[index].position.y,
+    };
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}api/movepoint`,
+      {
+        method: 'PUT',
+        headers: {
+          token: token,
+          clientId: userId,
+        },
+        body: JSON.stringify(credential),
+      }
+    );
+    const message = await response.json();
+    console.log(message);
   };
 
   useEffect(() => {
@@ -89,14 +117,17 @@ export default function Synoptique({
         points?.map((elem, index) => {
           return (
             <div
+              draggable={editMode ? 'true' : 'false'}
               className="point"
               ref={elem.ref}
-              onClick={handleClickPoint}
-              onDrag={handleDragPoint}
               onDragEnd={handleDragStopPoint}
+              onClick={handleClickPoint}
               key={elem.content.id}
               data-index={index}
-            />
+              style={{ background: elem.color }}
+            >
+              {!editMode && <p>{elem.content.title}</p>}
+            </div>
           );
         })}
     </div>

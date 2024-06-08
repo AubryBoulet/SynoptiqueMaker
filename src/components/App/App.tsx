@@ -22,6 +22,7 @@ function App() {
   const [userId, setUserId] = useState(0);
   const [offsetHeight, setOffsetHeight] = useState(0);
   const [synoptiqueList, setSynoptiqueList] = useState();
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     if (getCookieValue('SNMToken')) {
@@ -40,6 +41,8 @@ function App() {
           logged={logged}
           setLogged={setLogged}
           setOffsetHeight={setOffsetHeight}
+          editMode={editMode}
+          setEditMode={setEditMode}
         />
         <div className="body_content">
           <Routes>
@@ -76,6 +79,7 @@ function App() {
                   token={token}
                   userId={userId}
                   synoptiqueList={synoptiqueList}
+                  editMode={editMode}
                 />
               }
             />

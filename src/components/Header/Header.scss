@@ -1,3 +1,4 @@
+$text-color: rgb(240, 167, 9);
 header {
   display: flex;
   justify-content: space-between;
@@ -8,7 +9,7 @@ header {
   top: 0px;
   .button_slide {
     cursor: pointer;
-    background: linear-gradient(to right, rgb(240, 167, 9) 50%, rgb(240, 198, 9) 50%);
+    background: linear-gradient(to right, $text-color 50%, rgb(240, 198, 9) 50%);
     color: white;
     padding: .5rem ;
     border: solid 2px black;
@@ -26,6 +27,16 @@ header {
   }
   h1 {
     cursor: pointer;
-    color: rgb(233, 176, 53);
+    color: $text-color;
+  }
+  .bx {
+    cursor: pointer;
+    font-size: 2.5rem;
+    color: $text-color;
+  }
+  .header_toolbox {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
 }
