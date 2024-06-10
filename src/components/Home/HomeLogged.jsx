@@ -1,14 +1,33 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/button-has-type */
 import { useNavigate } from 'react-router-dom';
+import loadSubSynoptique from '../Synoptique/LoadSubSynoptiques';
+import createSynoptique from '../Synoptique/CreateSynoptique';
 
-export default function HomeLogged({ synoptiqueList }) {
+export default function HomeLogged({
+  synoptiqueList,
+  setSubSynoptique,
+  token,
+  userId,
+  setMainSynoptique,
+}) {
   const navigate = useNavigate();
+
   const handleClickSynoptique = (e) => {
-    navigate(`/synoptique/${e.currentTarget.dataset.slug}`);
+    const { index } = e.currentTarget.dataset;
+    const synoptiqueId = synoptiqueList[index].id;
+    loadSubSynoptique(token, userId, setSubSynoptique, synoptiqueId);
+    navigate(`/synoptique/${synoptiqueList[index].slug}`);
   };
+
+  const handleClickAddSynoptique = () => {
+    setMainSynoptique(0);
+    navigate('addsynoptique');
+  };
+
   return (
     <main>
       <h2>Panneau de contrôle</h2>
@@ -21,12 +40,12 @@ export default function HomeLogged({ synoptiqueList }) {
             </div>
           </div>
           <div className="menu_body synoptique">
-            {synoptiqueList?.map((elem) => {
+            {synoptiqueList?.map((elem, index) => {
               return (
                 <div key={elem.id}>
                   <div
                     className="menu_body_title_list"
-                    data-slug={elem.slug}
+                    data-index={index}
                     onClick={handleClickSynoptique}
                   >
                     <div>{elem.title}</div>
@@ -36,6 +55,12 @@ export default function HomeLogged({ synoptiqueList }) {
                 </div>
               );
             })}
+            <div className="menu_body_title_list_add">
+              <i
+                className="bx bxs-file-plus"
+                onClick={handleClickAddSynoptique}
+              />
+            </div>
           </div>
         </div>
         <div id="relations" className="dashboard_menu">

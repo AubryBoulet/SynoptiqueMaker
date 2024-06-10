@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable no-lonely-if */
 /* eslint-disable object-shorthand */
 /* eslint-disable one-var */
 /* eslint-disable no-restricted-syntax */
@@ -11,42 +13,55 @@ import { useEffect, useRef, useState } from 'react';
 import Point from './Points';
 import LoadPoints from './LoadPoints';
 import getImageSize from '../../utils/getImageSize';
+import loadSynoptique from './LoadSynoptique';
 
 export default function Synoptique({
   logged,
   offsetHeight,
   token,
   userId,
-  synoptiqueList,
+  synoptique,
   editMode,
+  setSynoptique,
+  subSynoptique,
 }) {
   const navigate = useNavigate();
   const backRef = useRef();
   const [points, setPoints] = useState();
-  const params = useParams();
   const [synoptiqueId, setSynoptiqueId] = useState();
   const [title, setTitle] = useState('');
   const [image, setImage] = useState('');
   const [imgSize, setImgSize] = useState();
+  const params = useParams();
 
   useEffect(() => {
     if (!logged) navigate('/');
-    if (synoptiqueList?.length) {
-      for (const i of synoptiqueList) {
-        if (i.slug === params.name) {
-          setSynoptiqueId(i.id);
-          setImage(i.image);
-          setTitle(i.title);
-          getImageSize(i.image, setImgSize);
-        }
-      }
+  }, [logged]);
+
+  useEffect(() => {
+    if (synoptique) {
+      setSynoptiqueId(synoptique.id);
+      setImage(synoptique.image);
+      setTitle(synoptique.title);
+      getImageSize(synoptique.image, setImgSize);
     }
-  }, []);
+  }, [synoptique]);
 
   useEffect(() => {
     if (synoptiqueId && imgSize)
       LoadPoints({ backRef, token, userId, synoptiqueId, setPoints, imgSize });
   }, [synoptiqueId, imgSize]);
+
+  useEffect(() => {
+    if (subSynoptique?.length) {
+      for (const i of subSynoptique) {
+        if (i.slug === params.name) {
+          loadSynoptique(token, userId, setSynoptique, i.id);
+          break;
+        }
+      }
+    }
+  }, [params.name, subSynoptique]);
 
   const handleResize = () => {
     if (points?.length) {
@@ -63,9 +78,16 @@ export default function Synoptique({
         `you clicked the ${points[index].content.title} in edit mode`
       );
     } else {
-      console.log(
-        `you clicked the ${points[index].content.title} in visualisation mode`
-      );
+      if (points[index].type === 1) {
+        console.log('type 1, ouvrir les infos');
+      } else {
+        for (const i of subSynoptique) {
+          if (i.id == points[index].content.link) {
+            navigate(`/synoptique/${i.slug}`);
+            break;
+          }
+        }
+      }
     }
   };
 
@@ -96,7 +118,6 @@ export default function Synoptique({
       }
     );
     const message = await response.json();
-    console.log(message);
   };
 
   useEffect(() => {

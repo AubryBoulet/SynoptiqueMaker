@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import logo from '../../assets/logo.svg';
 
 import './App.scss';
 import Header from '../Header/Header';
@@ -14,6 +13,7 @@ import getCookieValue from '../../utils/getCookie';
 import logFromCookie from '../../utils/logFromCookie';
 import Synoptique from '../Synoptique/Synoptique';
 import loadSynoptiques from '../Synoptique/LoadSynoptiques';
+import AddSynoptique from '../Synoptique/AddSynoptique';
 
 function App() {
   const [mail, setMail] = useState('');
@@ -22,7 +22,10 @@ function App() {
   const [userId, setUserId] = useState(0);
   const [offsetHeight, setOffsetHeight] = useState(0);
   const [synoptiqueList, setSynoptiqueList] = useState();
+  const [synoptique, setSynoptique] = useState();
+  const [subSynoptique, setSubSynoptique] = useState();
   const [editMode, setEditMode] = useState(false);
+  const [mainSynoptique, setMainSynoptique] = useState(0);
 
   useEffect(() => {
     if (getCookieValue('SNMToken')) {
@@ -48,7 +51,16 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<Home logged={logged} synoptiqueList={synoptiqueList} />}
+              element={
+                <Home
+                  logged={logged}
+                  synoptiqueList={synoptiqueList}
+                  setSubSynoptique={setSubSynoptique}
+                  token={token}
+                  userId={userId}
+                  setMainSynoptique={setMainSynoptique}
+                />
+              }
             />
             <Route
               path="/login"
@@ -78,8 +90,21 @@ function App() {
                   offsetHeight={offsetHeight}
                   token={token}
                   userId={userId}
-                  synoptiqueList={synoptiqueList}
+                  synoptique={synoptique}
                   editMode={editMode}
+                  setSynoptique={setSynoptique}
+                  subSynoptique={subSynoptique}
+                />
+              }
+            />
+            <Route
+              path="/addsynoptique"
+              element={
+                <AddSynoptique
+                  mainSynoptique={mainSynoptique}
+                  token={token}
+                  userId={userId}
+                  logged={logged}
                 />
               }
             />

@@ -4,11 +4,24 @@ import './Home.scss';
 import HomeLogged from './HomeLogged';
 import HomeNotLogged from './HomeNotLogged';
 
-export default function Home({ logged, synoptiqueList }) {
+export default function Home({
+  logged,
+  synoptiqueList,
+  setSubSynoptique,
+  token,
+  userId,
+  setMainSynoptique,
+}) {
   return (
     <main>
       {logged ? (
-        <HomeLogged synoptiqueList={synoptiqueList} />
+        <HomeLogged
+          synoptiqueList={synoptiqueList}
+          setSubSynoptique={setSubSynoptique}
+          token={token}
+          userId={userId}
+          setMainSynoptique={setMainSynoptique}
+        />
       ) : (
         <HomeNotLogged />
       )}

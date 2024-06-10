@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/button-has-type */
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Header.scss';
 import { useEffect, useRef, useState } from 'react';
 
@@ -40,7 +40,7 @@ export default function Header({
   }, []);
 
   useEffect(() => {
-    if (pathname.search(/synoptique/) === -1) {
+    if (pathname.search(/synoptique\//) === -1) {
       setDisplayToolBox(false);
     } else {
       setDisplayToolBox(true);
