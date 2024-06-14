@@ -7,6 +7,7 @@
 import { useNavigate } from 'react-router-dom';
 import './AddSynoptique.scss';
 import { useEffect, useRef, useState } from 'react';
+import slugifyStr from '../../utils/slugify';
 
 export default function AddSynoptique({ mainSynoptique, token, userId, logged }) {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function AddSynoptique({ mainSynoptique, token, userId, logged })
     console.log(file);
     const data = new FormData();
     data.append('image',file);
-    const response = await fetch(
+    let response = await fetch(
       `${import.meta.env.VITE_API_URL}api/sendimage`,
       {
         method: 'POST',
@@ -45,13 +46,31 @@ export default function AddSynoptique({ mainSynoptique, token, userId, logged })
           token: token,
           clientId: userId,
           'Content-Name': file.name,
-          'Content-Type': 'image/png'
         },
-        body: file,
+        body: data,
       }
     );
-    // const message = await response.json();
-    // console.log(message);
+    const message = await response.json();
+    const credential = {
+      User_Id: userId,
+      Main_Synoptique_Id: mainSynoptique,
+      Image: message,
+      Title: title,
+      Slug: slugifyStr(title),
+    }
+    response = await fetch(
+      `${import.meta.env.VITE_API_URL}api/createsynoptique`,
+      {
+        method: 'POST',
+        headers: {
+          token: token,
+          clientId: userId,
+        },
+        body: JSON.stringify(credential),
+      }
+    )
+    const result = await response.json()
+    navigate('/');
   };
   const handleChangeTitle = (e) => {
     setTitle(e.currentTarget.value);
